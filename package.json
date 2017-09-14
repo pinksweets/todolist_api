@@ -1,0 +1,33 @@
+{
+  "name": "todolist_api",
+  "version": "1.0.0",
+  "main": "src/index.ts",
+  "repository": "https://github.com/pinksweets/todolist_api.git",
+  "author": "torysmint@gmail.com",
+  "license": "MIT",
+  "scripts": {
+    "api": "aglio -i ./api/todolist.md --server",
+    "api_html": "aglio -i ./api/todolist.md -o ./api/todolist.html",
+    "test": "./node_modules/.bin/mocha --compilers ts:espower-typescript/guess test/*.test.ts",
+    "test_w": "./node_modules/.bin/mocha --compilers ts:espower-typescript/guess -w test/*.test.ts",
+    "compile": "node ./node_modules/typescript/bin/tsc -p ./src",
+    "start": "node ./out/www"
+  },
+  "dependencies": {
+    "express": "^4.15.4",
+    "mongodb": "^2.2.31",
+    "morgan": "^1.8.2",
+    "typescript": "^2.5.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.0.37",
+    "@types/mocha": "^2.2.43",
+    "@types/mongodb": "^2.2.11",
+    "@types/morgan": "^1.7.32",
+    "@types/node": "^8.0.28",
+    "@types/power-assert": "^1.4.29",
+    "espower-typescript": "^8.1.1",
+    "mocha": "^3.5.3",
+    "power-assert": "^1.4.4"
+  }
+}
