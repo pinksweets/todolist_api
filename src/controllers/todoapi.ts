@@ -45,7 +45,7 @@ export let updateApi = (req : Request, res : Response) => {
 };
 
 export let destroyApi = (req : Request, res : Response) => {
-    let _id = req.params._id;
+    let _id = req.params.id;
     todo
         .destroy(_id)
         .then((ret) => {
