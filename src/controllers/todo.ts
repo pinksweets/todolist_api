@@ -8,7 +8,6 @@ export let root = async(userid : string) => {
 };
 
 export let search = async(userid : string, keyword : string) => {
-    console.log(keyword);
     let query = Todo.find({
         $or: [
             {
@@ -20,7 +19,6 @@ export let search = async(userid : string, keyword : string) => {
         userid: userid
     });
     let res = await query.exec();
-    console.log(JSON.stringify(res));
     return JSON.stringify(res);
 };
 
@@ -49,6 +47,8 @@ export let update = async(_id : string, userid : string, title : string, body : 
 };
 
 export let destroy = async(_id : string) => {
-    await Todo.findByIdAndRemove(_id).exec();
+    await Todo
+        .findByIdAndRemove(_id)
+        .exec();
     return "end";
 };
