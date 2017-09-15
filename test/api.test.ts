@@ -1,11 +1,12 @@
 import {} from 'jest';
 import * as supertest from 'supertest';
-import * as app from '../src/server';
-import * as todo from '../src/controllers/todo';
+import * as assert from 'assert';
 import * as mongodb from "mongodb";
 import * as mongoose from "mongoose";
+
+import * as app from '../src/server';
+import * as todo from '../src/controllers/todo';
 import Todo from '../src/models/Todo';
-import * as assert from 'assert';
 
 let request : supertest.SuperTest < supertest.Test >;
 const mongourl = "mongodb://localhost:27017/todolist";
@@ -33,14 +34,13 @@ beforeAll(() => {
     // テストデータ登録
     mongodb
         .MongoClient
-        .connect(mongourl, (err, db) => {
-            Todo.find((err, res) => {
-                res.forEach(item => {
-                    Todo.findByIdAndRemove(item._id, (err, res) => {
-                        if (err) 
-                            throw err;
-                        return 'removed';
-                    });
+        .connect(mongourl, async (err, db) => {
+            let docs = await Todo.find();
+            docs.forEach(item => {
+                Todo.findByIdAndRemove(item._id, (err, res) => {
+                    if (err) 
+                        throw err;
+                    return 'removed';
                 });
             });
             testData.forEach(item => {
@@ -99,10 +99,6 @@ describe("integration test", () => {
             .post(`/father/destroy/${testData[0]._id}`)
             .type("form")
             .send({})
-            .expect(res => {
-                console.log(`destroyId: ${testData[0]._id}`);
-                console.log(JSON.stringify(res));
-            })
             .expect(200, done);
     });
 });
