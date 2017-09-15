@@ -23,7 +23,7 @@ FORMAT: 1A
     + Attributes
         + id: 1 (number, required) - TODOのID
  
-## 検索 [/{userid}/search{?keyword}]
+## 検索 [/{userid}/search/{keyword}]
  
 ### 検索API [GET]
  
