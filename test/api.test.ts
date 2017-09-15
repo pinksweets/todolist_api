@@ -47,7 +47,7 @@ beforeAll(() => {
                 (new Todo(item))
                     .save()
                     .then(rec => {
-                        item["_id"] = rec._id;
+                        item["_id"] = rec._id.toHexString();
                     });
             });
             db.close();
@@ -67,8 +67,7 @@ describe("integration test", () => {
     });
     it("search /:userid/search", (done) => {
         request
-            .get("/mother/search")
-            .query({keyword: "準備"})
+            .get("/mother/search/準備")
             .expect(res => {
                 console.log(res.text);
             })
