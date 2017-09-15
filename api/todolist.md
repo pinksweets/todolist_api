@@ -2,7 +2,7 @@ FORMAT: 1A
 
 # TODOリスト
  
-## 登録 [/{user}/add]
+## 登録 [/{userid}/add]
  
 ### 登録API [POST]
  
@@ -12,7 +12,7 @@ FORMAT: 1A
 * 登録に成功した場合、TODOを管理するidを返す。
  
 + Parameters
-    + user: sampleuser (string, required) - ユーザID
+    + userid: sampleuser (string, required) - ユーザID
  
 + Request (application/json)
     + Attributes
@@ -23,7 +23,7 @@ FORMAT: 1A
     + Attributes
         + id: 1 (number, required) - TODOのID
  
-## 検索 [/{user}/search{?keyword}]
+## 検索 [/{userid}/search{?keyword}]
  
 ### 検索API [GET]
  
@@ -33,17 +33,17 @@ FORMAT: 1A
 * 検索条件が指定されていない場合、登録されているTODO情報を全て返却する。
  
 + Parameters
-    + user: sampleuser (string, required) - ユーザID
+    + userid: sampleuser (string, required) - ユーザID
     + keyword: abc123 (string, optional) - 検索条件
  
 + Response 200 (application/json)
     + Attributes
         + todos (array[object])
-            + id: 1(number)
+            + userid: sampleuser(number)
             + title: 'タイトル'(string)
             + body: '内容'(string)
  
-## 更新 [/{user}/update]
+## 更新 [/{userid}/update]
  
 ### 更新API [POST]
  
@@ -53,7 +53,7 @@ FORMAT: 1A
 * 登録に成功した場合、TODOを管理するidを返す。
  
 + Parameters
-    + user: sampleuser (string, required) - ユーザID
+    + userid: sampleuser (string, required) - ユーザID
  
 + Request (application/json)
     + Attributes
@@ -65,7 +65,7 @@ FORMAT: 1A
     + Attributes
         + id: todo0001 (string, required) - TODOのID
  
-## 削除 [/{user}/destroy/{id}]
+## 削除 [/{userid}/destroy/{id}]
  
 ### 削除API [POST]
  
@@ -75,7 +75,7 @@ FORMAT: 1A
 * 削除成否に関わらずHTTPステータスコード201を返却する。
  
 + Parameters
-    + user: sampleuser (string, required) - ユーザID
+    + userid: sampleuser (string, required) - ユーザID
     + id: 1(number, required) - TODOのID
  
 + Response 200 (application/json)
