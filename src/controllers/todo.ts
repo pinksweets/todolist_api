@@ -1,5 +1,6 @@
 import {default as Todo, TodoModel} from '../models/Todo';
 import {Request, Response, NextFunction} from 'express';
+import * as mongodb from "mongodb";
 
 export let root = async(userid : string) => {
     let query = Todo.find({userid: userid});
@@ -7,19 +8,20 @@ export let root = async(userid : string) => {
 };
 
 export let search = async(userid : string, keyword : string) => {
+    console.log(keyword);
     let query = Todo.find({
         $or: [
             {
-                title: keyword
+                title: new RegExp(keyword, 'i')
             }, {
-                body: keyword
+                body: new RegExp(keyword, 'i')
             }
         ],
-        userid: {
-            $eq: userid
-        }
+        userid: userid
     });
-    return JSON.stringify(await query.exec());
+    let res = await query.exec();
+    console.log(JSON.stringify(res));
+    return JSON.stringify(res);
 };
 
 export let add = async(userid : string, title : string, body : string) => {
@@ -27,7 +29,9 @@ export let add = async(userid : string, title : string, body : string) => {
     let _id = await todo.save((err, product) => {
         if (err) 
             throw err;
-        return product._id;
+        return product
+            ._id
+            .toHexString();
     });
     return _id;
 };
@@ -38,11 +42,13 @@ export let update = async(_id : string, userid : string, title : string, body : 
         title: title,
         body: body
     };
-    return await Todo.update(_id, {$set: todo}).exec((err, res) => {
-        return JSON.stringify(res);
-    });
+    await Todo
+        .findByIdAndUpdate(_id, todo)
+        .exec();
+    return "end";
 };
 
 export let destroy = async(_id : string) => {
-    return await Todo.findByIdAndRemove(_id).exec();
+    await Todo.findByIdAndRemove(_id).exec();
+    return "end";
 };
