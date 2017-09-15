@@ -6,8 +6,8 @@
   "author": "torysmint@gmail.com",
   "license": "MIT",
   "scripts": {
-    "start": "npm run build && node dist/app.js",
-    "build": "npm run lint && tsc",
+    "start": "npm run build && node dist/server.js",
+    "build": "tsc",
     "test": "jest --forceExit",
     "coverage": "jest --coverage",
     "mocha": "mocha --compilers ts:ts-node/register test/**/*.ts --require espower-ts-node",
