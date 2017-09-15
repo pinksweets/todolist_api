@@ -38,7 +38,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
  * API examples routes.
  */
 app.get("/:userid/", todoController.rootApi);
-app.get("/:userid/search", todoController.searchApi);
+app.get("/:userid/search/:keyword", todoController.searchApi);
 
 app.post("/:userid/add", todoController.addApi);
 app.post("/:userid/update", todoController.updateApi);
