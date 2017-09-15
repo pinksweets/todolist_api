@@ -1,4 +1,5 @@
 node_modules/
 .vscode/
-out/
-npm-debug.log
+dist/
+*.log
+coverage/
