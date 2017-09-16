@@ -1,15 +1,15 @@
-import {} from 'jest';
-import * as supertest from 'supertest';
-import * as assert from 'assert';
+import {} from "jest";
+import * as supertest from "supertest";
 import * as mongodb from "mongodb";
 import * as mongoose from "mongoose";
 
-import * as app from '../src/server';
-import * as todo from '../src/controllers/todo';
-import Todo from '../src/models/Todo';
+import * as app from "../src/server";
+import * as todo from "../src/controllers/todo";
+import Todo from "../src/models/Todo";
 
 let request : supertest.SuperTest < supertest.Test >;
 const mongourl = "mongodb://localhost:27017/todolist";
+// tslint:disable-next-line:prefer-const
 let testData : any = [
     {
         userid: "father",
@@ -27,78 +27,84 @@ let testData : any = [
         userid: "mother",
         title: "出勤準備",
         body: "洗顔、化粧"
+    }, {
+        userid: "son",
+        title: "朝タスク",
+        body: "顔洗う、学校の準備"
     }
-]
-beforeAll(() => {
-    request = supertest(app);
-    // テストデータ登録
-    mongodb
-        .MongoClient
-        .connect(mongourl, async (err, db) => {
-            let docs = await Todo.find();
-            docs.forEach(item => {
-                Todo.findByIdAndRemove(item._id, (err, res) => {
-                    if (err) 
-                        throw err;
-                    return 'removed';
-                });
-            });
-            testData.forEach(item => {
-                (new Todo(item))
-                    .save()
-                    .then(rec => {
-                        item["_id"] = rec._id.toHexString();
-                    });
-            });
-            db.close();
-        });
-});
+];
 
-describe("integration test", () => {
-    it("root /:userid/", (done) => {
-        request
-            .get("/father/")
-            .expect(res => {
-                assert.equal(JSON.stringify(testData.filter(data => {
-                    return data.userid === "father";
-                })), res.text);
-            })
-            .expect(200, done);
+describe("integration test", async() => {
+    beforeAll(() => {
+        request = supertest(app);
+        // テストデータ登録
+        mongodb
+            .MongoClient
+            .connect(mongourl, async(err, db) => {
+                const docs = await Todo.find();
+                docs.forEach(item => {
+                    Todo.findByIdAndRemove(item._id, (err, res) => {
+                        if (err) {
+                            throw err;
+                        }
+                        return "removed";
+                    });
+                });
+                testData.forEach(item => {
+                    (new Todo(item))
+                        .save()
+                        .then(rec => {
+                            item["_id"] = rec
+                                ._id
+                                .toHexString();
+                        });
+                });
+                db.close();
+            });
     });
-    it("search /:userid/search", (done) => {
-        request
-            .get("/mother/search/準備")
-            .expect(res => {
-                console.log(res.text);
-            })
-            .expect(200, done);
+    it("root /:userid/", async(done) => {
+        const res = await request.get("/father/");
+        const todoData = testData.filter(data => {
+            return data.userid === "father";
+        });
+        expect(JSON.parse(res.text)).toMatchObject(todoData);
+        done();
     });
-    it("add /:userid/add", (done) => {
-        request
+    it("search /:userid/search", async(done) => {
+        const res = await request.get(encodeURI("/mother/search/準備"));
+        const todoData = testData.filter(data => {
+            return data.userid === "mother" && data.title === "出勤準備";
+        });
+        expect(JSON.parse(res.text)).toMatchObject(todoData);
+        done();
+    });
+    it("add /:userid/add", async(done) => {
+        const res = await request
             .post("/mother/add")
             .type("form")
-            .send({title: "TODO登録テスト", body: "テストで登録"})
-            .expect(res => {
-                console.log(res.text);
-            })
-            .expect(200, done);
+            .send({title: "TODO登録テスト", body: "テストで登録"});
+        const todoData = JSON.parse(res.text);
+        expect(todoData.title).toEqual("TODO登録テスト");
+        expect(todoData.body).toEqual("テストで登録");
+        done();
     });
-    it("update /:userid/update", (done) => {
-        request
+    it("update /:userid/update", async(done) => {
+        const res = await request
             .post("/mother/update")
             .type("form")
-            .send({_id: testData[2]._id, title: "TODO更新テスト", body: "テストで更新"})
-            .expect(res => {
-                console.log(`updateId: ${testData[2]._id}`);
-                console.log(JSON.stringify(res));
-            })
-            .expect(200, done);
+            .send({_id: testData[2]._id, title: "TODO更新テスト", body: "テストで更新"});
+        const todoData = JSON.parse(res.text);
+        expect(todoData._id).toBe(testData[2]._id);
+        expect(todoData.title).toBe("TODO更新テスト");
+        expect(todoData.body).toBe("テストで更新");
+        done();
     });
-    it("destroy /:userid/destroy/:id", (done) => {
-        request
-            .post(`/father/destroy/${testData[0]._id}`)
+    it("destroy /:userid/destroy/:id", async(done) => {
+        const res = await request
+            .post(`/father/destroy/${testData[4]._id}`)
             .type("form")
-            .send({})
-            .expect(200, done);
+            .send({});
+        expect(res.text).toBe("end");
+        done();
     });
 });
