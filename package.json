@@ -7,11 +7,13 @@
   "license": "MIT",
   "scripts": {
     "start": "npm run build && node dist/server.js",
-    "build": "tsc",
+    "build": "npm run lint && tsc",
     "test": "jest --forceExit",
-    "coverage": "jest --coverage",
+    "test_w": "jest --watchAll",
+    "coverage": "jest --coverage --watchAll",
     "mocha": "mocha --compilers ts:ts-node/register test/**/*.ts --require espower-ts-node",
-    "lint": "tslint -c tslint.json -p tsconfig.json --type-check"
+    "lint": "tslint -c tslint.json -p tsconfig.json --type-check",
+    "api": "aglio -i ./api/todolist.md -o ./api/todolist.html"
   },
   "jest": {
     "globals": {
@@ -27,7 +29,7 @@
       "^.+\\.(ts|tsx)$": "./node_modules/ts-jest/preprocessor.js"
     },
     "testMatch": [
-      "**/test/**/*.test.(ts|js)"
+      "**/test/**/*.test.(ts)"
     ],
     "testEnvironment": "node"
   },
@@ -49,7 +51,6 @@
     "@types/morgan": "^1.7.32",
     "@types/node": "^8.0.28",
     "@types/supertest": "^2.0.3",
-    "assert": "^1.4.1",
     "espower-typescript": "^8.1.1",
     "jest": "^21.1.0",
     "supertest": "^3.0.0",
