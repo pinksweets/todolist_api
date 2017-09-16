@@ -1,10 +1,10 @@
-import * as mongoose from 'mongoose';
+import * as mongoose from "mongoose";
 
 export type TodoModel = mongoose.Document & {
     userid: string,
     title: string,
     body: string
-}
+};
 
 export const todoSchema = new mongoose.Schema({
     userid: String,
