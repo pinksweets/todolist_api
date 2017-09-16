@@ -1,27 +1,25 @@
 FORMAT: 1A
 
-# TODOリスト
+# Group TODOリスト
  
-## 登録 [/{userid}/add]
+## ユーザ情報 [/{userid}]
  
-### 登録API [POST]
+### ユーザTODO取得API [GET]
  
 #### 処理概要
  
-* TODO情報を新しく登録する。
-* 登録に成功した場合、TODOを管理するidを返す。
+* ユーザのTODO情報を全て返却する。
  
 + Parameters
     + userid: sampleuser (string, required) - ユーザID
  
-+ Request (application/json)
-    + Attributes
-        + title: abc123 (string, required) - タイトル(format: .{1,50})
-        + body: abc123 (string, required) - 内容(pattern: ^.{1,200}$)
- 
 + Response 200 (application/json)
     + Attributes
-        + id: 1 (number, required) - TODOのID
+        + todos (array[object])
+            + _id: 59bc757aadb85c2ac429af5a(string)
+            + userid: sampleuser(string)
+            + title: タイトル(string)
+            + body: 内容(string)
  
 ## 検索 [/{userid}/search/{keyword}]
  
@@ -39,9 +37,34 @@ FORMAT: 1A
 + Response 200 (application/json)
     + Attributes
         + todos (array[object])
-            + userid: sampleuser(number)
-            + title: 'タイトル'(string)
-            + body: '内容'(string)
+            + _id: 59bc757aadb85c2ac429af5a(string)
+            + userid: sampleuser(string)
+            + title: タイトル(string)
+            + body: 内容(string)
+ 
+## 登録 [/{userid}/add]
+ 
+### 登録API [POST]
+ 
+#### 処理概要
+ 
+* TODO情報を新しく登録する。
+* 登録に成功した場合、登録したTODO情報を返却する。
+ 
++ Parameters
+    + userid: sampleuser (string, required) - ユーザID
+ 
++ Request (application/json)
+    + Attributes
+        + title: abc123 (string, required) - タイトル(format: .{1,50})
+        + body: abc123 (string, required) - 内容(pattern: ^.{1,200}$)
+ 
++ Response 200 (application/json)
+    + Attributes
+        + _id: 59bc757aadb85c2ac429af5a(string)
+        + userid: sampleuser(string)
+        + title: タイトル(string)
+        + body: 内容(string)
  
 ## 更新 [/{userid}/update]
  
@@ -49,21 +72,24 @@ FORMAT: 1A
  
 #### 処理概要
  
-* TODO情報を新しく登録する。
-* 登録に成功した場合、TODOを管理するidを返す。
+* TODO情報を更新する。
+* 更新に成功した場合、更新後のTODO情報を返却する。
  
 + Parameters
     + userid: sampleuser (string, required) - ユーザID
  
 + Request (application/json)
     + Attributes
-        + id: 1(number, required) - TODOのID
+        + _id: 59bc757aadb85c2ac429af5a(string, required)
         + title: 予定 (string, required) - タイトル(format: .{1,50})
         + body: あああ (string, required) - 内容(pattern: ^.{1,200}$)
  
 + Response 200 (application/json)
     + Attributes
-        + id: todo0001 (string, required) - TODOのID
+        + _id: 59bc757aadb85c2ac429af5a(string)
+        + userid: sampleuser(string)
+        + title: タイトル(string)
+        + body: 内容(string)
  
 ## 削除 [/{userid}/destroy/{id}]
  
