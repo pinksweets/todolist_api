@@ -1,5 +1,4 @@
-import {default as Todo } from "../models/Todo";
-import { Request, Response, NextFunction } from "express";
+import { Request, Response } from "express";
 import * as todo from "./todo";
 
 export let rootApi = (req : Request, res : Response) => {

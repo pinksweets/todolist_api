@@ -1,6 +1,4 @@
-import {default as Todo } from "../models/Todo";
-import { Request, Response, NextFunction } from "express";
-import * as mongodb from "mongodb";
+import Todo from "../models/Todo";
 
 export let root = async(userid : string) => {
     const query = Todo.find({userid: userid});
