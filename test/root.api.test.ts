@@ -28,15 +28,21 @@ describe("ルートAPI test", () => {
         ];
         await registData(testData);
 
-        expect(JSON.parse((await request.get("/father/")).text)).toMatchObject(testData.filter(data => {
+        const res_1 = await request.get("/father/");
+        expect(res_1.status).toBe(200);
+        expect(JSON.parse(res_1.text)).toMatchObject(testData.filter(data => {
             return data.userid === "father";
         }));
 
-        expect(JSON.parse((await request.get("/mother/")).text)).toMatchObject(testData.filter(data => {
+        const res_2 = await request.get("/mother/");
+        expect(res_2.status).toBe(200);
+        expect(JSON.parse(res_2.text)).toMatchObject(testData.filter(data => {
             return data.userid === "mother";
         }));
 
-        expect(JSON.parse((await request.get("/son/")).text)).toMatchObject(testData.filter(data => {
+        const res_3 = await request.get("/son/");
+        expect(res_3.status).toBe(200);
+        expect(JSON.parse(res_3.text)).toMatchObject(testData.filter(data => {
             return data.userid === "son";
         }));
 

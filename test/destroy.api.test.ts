@@ -28,10 +28,9 @@ describe("削除API test", () => {
                 .post(`/destroy_1/destroy/${todo._id}`)
                 .type("form")
                 .send({});
+            expect(res.status).toBe(200);
             expect(res.text).toBe("end");
-
             expect(JSON.parse((await request.get(encodeURI(`/destroy_1/search/${todo.title}`))).text)).toMatchObject([]);
-
             done();
         });
     });

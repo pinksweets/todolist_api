@@ -28,7 +28,9 @@ describe("検索API test", () => {
         ];
         await registData(testData);
 
-        expect(JSON.parse((await request.get(encodeURI("/search_1/search/洗う"))).text)).toMatchObject([
+        const res_1 = await request.get(encodeURI("/search_1/search/洗う"));
+        expect(res_1.status).toBe(200);
+        expect(JSON.parse(res_1.text)).toMatchObject([
             {
                 userid: "search_1",
                 title: "朝タスク",
@@ -36,7 +38,9 @@ describe("検索API test", () => {
             }
         ]);
 
-        expect(JSON.parse((await request.get(encodeURI("/search_2/search/準備"))).text)).toMatchObject([
+        const res_2 = await request.get(encodeURI("/search_2/search/準備"));
+        expect(res_2.status).toBe(200);
+        expect(JSON.parse(res_2.text)).toMatchObject([
             {
                 userid: "search_2",
                 title: "朝タスク",
