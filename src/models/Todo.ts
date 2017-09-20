@@ -1,10 +1,4 @@
 import * as mongoose from "mongoose";
 
-export const todoSchema = new mongoose.Schema({
-    userid: String,
-    title: String,
-    body: String
-});
-
-const Todo = mongoose.model("todos", todoSchema);
+const Todo = mongoose.model("todos", new mongoose.Schema({userid: String, title: String, body: String}, { validateBeforeSave : false }));
 export default Todo;
