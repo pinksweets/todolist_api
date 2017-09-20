@@ -3,27 +3,25 @@ import * as bodyParser from "body-parser";
 import * as logger from "morgan";
 import * as path from "path";
 import * as mongoose from "mongoose";
-
-/**
- * Controllers (route handlers).
- */
 import * as todoController from "./controllers/todoapi";
 
 /**
  * Create Express server.
  */
-const app = express();
+export const app = express();
 
 /**
  * Connect to MongoDB.
  */
 const mongourl = "mongodb://localhost:27017/todolist";
-mongoose.connect(mongourl);
+mongoose.connect(mongourl, {useMongoClient: true});
 
-mongoose.connection.on("error", () => {
-  console.log("MongoDB connection error. Please make sure MongoDB is running.");
-  process.exit();
-});
+mongoose
+  .connection
+  .on("error", () => {
+    console.log("MongoDB connection error. Please make sure MongoDB is running.");
+    process.exit();
+  });
 
 /**
  * Express configuration.
@@ -31,7 +29,7 @@ mongoose.connection.on("error", () => {
 app.set("port", process.env.PORT || 3000);
 app.use(logger("dev"));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({extended: true}));
 
 /**
  * API examples routes.
@@ -46,9 +44,7 @@ app.post("/:userid/destroy/:id", todoController.destroyApi);
 /**
  * Start Express server.
  */
-app.listen(app.get("port"), () => {
+export const server = app.listen(app.get("port"), () => {
   console.log(("  App is running at http://localhost:%d in %s mode"), app.get("port"), app.get("env"));
   console.log("  Press CTRL-C to stop\n");
 });
-
-module.exports = app;
