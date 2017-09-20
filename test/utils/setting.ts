@@ -8,7 +8,6 @@ import Todo from "../../src/models/Todo";
 
 export let request : supertest.SuperTest < supertest.Test >;
 export const cleanUp = async() => {
-    // テスト前にMongoDBのデータ削除
     const docs = await Todo.find();
     docs.forEach(item => {
         Todo.findByIdAndRemove(item._id, (err, res) => {

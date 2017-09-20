@@ -1,5 +1,5 @@
 import {} from "jest";
-import { request } from "./utils/before";
+import { request } from "./utils/setting";
 
 describe("登録API test", () => {
     it("パラメータ[title,body]のパターン", async(done) => {

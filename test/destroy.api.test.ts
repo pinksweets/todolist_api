@@ -1,5 +1,5 @@
 import {} from "jest";
-import { request, registData, cleanUp } from "./utils/before";
+import { request, registData } from "./utils/setting";
 
 describe("削除API test", () => {
     it("削除→検索", async(done) => {

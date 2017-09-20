@@ -1,5 +1,5 @@
 import {} from "jest";
-import {　request, registData, cleanUp　} from "./utils/before";
+import {　request, registData } from "./utils/setting";
 
 describe("ルートAPI test", () => {
     it("root /:userid/", async(done) => {
