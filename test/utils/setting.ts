@@ -1,6 +1,6 @@
 import {} from "jest";
 import * as supertest from "supertest";
-import * as mongodb from "mongodb";
+import * as mongoose from "mongoose";
 
 import { app, server } from "../../src/server";
 import * as todo from "../../src/controllers/todo";
@@ -44,9 +44,10 @@ export const registData = (data : Array < {
 
 beforeAll(() => {
     request || (request = supertest(app));
-    mongodb
-        .MongoClient
-        .connect("mongodb://localhost:27017/todolist", async(err, db) => {});
+    mongoose.connect("mongodb://localhost:27017/todolist", {
+        useMongoClient: true,
+        promiseLibrary: global.Promise
+    });
 });
 afterAll(() => {
     server.close();
