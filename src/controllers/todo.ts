@@ -1,4 +1,4 @@
-import {default as Todo, TodoModel } from "../models/Todo";
+import {default as Todo } from "../models/Todo";
 import { Request, Response, NextFunction } from "express";
 import * as mongodb from "mongodb";
 
@@ -24,14 +24,14 @@ export let search = async(userid : string, keyword : string) => {
 
 export let add = async(userid : string, title : string, body : string) => {
     const todo = new Todo({userid: userid, title: title, body: body});
-    const _id = await todo.save((err, product) => {
-        if (err)
+    return await todo.save((err, product) => {
+        if (err) {
             throw err;
+        }
         return product
             ._id
             .toHexString();
     });
-    return _id;
 };
 
 export let update = async(_id : string, userid : string, title : string, body : string) => {
