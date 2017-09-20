@@ -37,11 +37,15 @@ export let updateApi = (req : Request, res : Response) => {
         title = req.body.title || "",
         body = req.body.body || "",
         _id = req.body._id;
-    todo
+    if (_id) {
+        todo
         .update(_id, userid, title, body)
         .then((ret) => {
             res.send(ret);
         });
+    } else {
+        res.sendStatus(422);
+    }
 };
 
 export let destroyApi = (req : Request, res : Response) => {
