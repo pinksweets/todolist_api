@@ -32,15 +32,13 @@ export let add = async(userid : string, title : string, body : string) => {
     });
 };
 
-export let update = async(_id : string, userid : string, title : string, body : string) => {
+export let update = (_id : string, userid : string, title : string, body : string) => {
     const todo = {
         userid: userid,
         title: title,
         body: body
     };
-    return await new Promise((resolve, reject) => {
-        resolve(Todo.findByIdAndUpdate(_id, todo, {new: true}).exec());
-    });
+    return Todo.findByIdAndUpdate(_id, todo, {new: true}).exec();
 };
 
 export let destroy = async(_id : string) => {
