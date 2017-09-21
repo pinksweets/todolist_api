@@ -38,10 +38,13 @@ export let updateApi = (req : Request, res : Response) => {
         _id = req.body._id;
     if (_id) {
         todo
-        .update(_id, userid, title, body)
-        .then((ret) => {
-            res.send(ret);
-        });
+            .update(_id, userid, title, body)
+            .then((ret) => {
+                res.send(ret);
+            })
+            .catch(() => {
+                res.sendStatus(422);
+            });
     } else {
         res.sendStatus(422);
     }

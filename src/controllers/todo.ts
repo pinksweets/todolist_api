@@ -38,10 +38,9 @@ export let update = async(_id : string, userid : string, title : string, body : 
         title: title,
         body: body
     };
-    const res = await Todo
-        .findByIdAndUpdate(_id, todo, {new: true})
-        .exec();
-    return JSON.stringify(res);
+    return await new Promise((resolve, reject) => {
+        resolve(Todo.findByIdAndUpdate(_id, todo, {new: true}).exec());
+    });
 };
 
 export let destroy = async(_id : string) => {
