@@ -31,7 +31,7 @@ export const registData = (data : Array < {
 } > > => {
     const ret = data.map(async(item) => {
         item["_id"] = await(new Todo(item))
-            .save()
+            .save({validateBeforeSave : false})
             .then(rec => {
                 return rec
                     ._id

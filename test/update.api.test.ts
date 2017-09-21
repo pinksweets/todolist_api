@@ -1,8 +1,10 @@
 import {} from "jest";
 import { request, registData } from "./utils/setting";
+import Todo from "../src/models/Todo";
 
-describe("integration test", () => {
-    it("update /:userid/update", async(done) => {
+describe("更新API test", () => {
+    let todos : any;
+    beforeAll(async() => {
         const testData : any = [
             {
                 userid: "update_1",
@@ -22,83 +24,64 @@ describe("integration test", () => {
                 body: "洗顔、化粧"
             }
         ];
-        const todos = await registData(testData);
-        todos[2].then(async(todo) => {
-            const res = await request
-                .post("/update_2/update")
-                .type("form")
-                .send({_id: todo._id, title: "TODO更新テスト", body: "テストで更新"});
-            expect(res.status).toBe(200);
-            const todoData = JSON.parse(res.text);
-            expect(todoData._id).toBe(todo._id);
-            expect(todoData.userid).toBe("update_2");
-            expect(todoData.title).toBe("TODO更新テスト");
-            expect(todoData.body).toBe("テストで更新");
-            done();
-        });
+        todos = await registData(testData);
+    });
+    it("update /:userid/update", async(done) => {
+        const id = (await todos[2])._id;
+        const res = await request
+            .post("/update_2/update")
+            .type("form")
+            .send({_id: id, title: "TODO更新テスト", body: "テストで更新"});
+        expect(res.status).toBe(200);
+        const todoData = JSON.parse(res.text);
+        expect(todoData._id).toBe(id);
+        expect(todoData.userid).toBe("update_2");
+        expect(todoData.title).toBe("TODO更新テスト");
+        expect(todoData.body).toBe("テストで更新");
+        done();
     });
     it("update _idなし", async(done) => {
-        const testData : any = [
-            {
-                userid: "update_1",
-                title: "朝タスク",
-                body: "みんなを起こす、洗濯機回す、ごはん作る、洗濯物干す、食器洗う"
-            }
-        ];
-        const todos = await registData(testData);
-        todos[0].then(async(todo) => {
-            const res = await request
-                .post("/update_2/update")
-                .type("form")
-                .send({title: "TODO更新テスト", body: "テストで更新"});
-            expect(res.status).toBe(422);
-            done();
-        });
+        const res = await request
+            .post("/update_2/update")
+            .type("form")
+            .send({title: "TODO更新テスト", body: "テストで更新"});
+        expect(res.status).toBe(422);
+        done();
     });
     it("update titleなし", async(done) => {
-        const testData : any = [
-            {
-                userid: "update_1",
-                title: "朝タスク",
-                body: "みんなを起こす、洗濯機回す、ごはん作る、洗濯物干す、食器洗う"
-            }
-        ];
-        const todos = await registData(testData);
-        todos[0].then(async(todo) => {
-            const res = await request
-                .post("/update_2/update")
-                .type("form")
-                .send({_id: todo._id, body: "テストで更新"});
-            expect(res.status).toBe(200);
-            const todoData = JSON.parse(res.text);
-            expect(todoData._id).toBe(todo._id);
-            expect(todoData.userid).toBe("update_2");
-            expect(todoData.title).toBe("");
-            expect(todoData.body).toBe("テストで更新");
-            done();
-        });
+        const id = (await todos[0])._id;
+        const res = await request
+            .post("/update_2/update")
+            .type("form")
+            .send({_id: id, body: "テストで更新"});
+        expect(res.status).toBe(200);
+        const todoData = JSON.parse(res.text);
+        expect(todoData._id).toBe(id);
+        expect(todoData.userid).toBe("update_2");
+        expect(todoData.title).toBe("");
+        expect(todoData.body).toBe("テストで更新");
+        done();
     });
     it("update bodyなし", async(done) => {
-        const testData : any = [
-            {
-                userid: "update_1",
-                title: "朝タスク",
-                body: "みんなを起こす、洗濯機回す、ごはん作る、洗濯物干す、食器洗う"
-            }
-        ];
-        const todos = await registData(testData);
-        todos[0].then(async(todo) => {
-            const res = await request
-                .post("/update_2/update")
-                .type("form")
-                .send({_id: todo._id, title: "TODO更新テスト"});
-            expect(res.status).toBe(200);
-            const todoData = JSON.parse(res.text);
-            expect(todoData._id).toBe(todo._id);
-            expect(todoData.userid).toBe("update_2");
-            expect(todoData.title).toBe("TODO更新テスト");
-            expect(todoData.body).toBe("");
-            done();
-        });
+        const id = (await todos[2])._id;
+        const res = await request
+            .post("/update_2/update")
+            .type("form")
+            .send({_id: id, title: "TODO更新テスト"});
+        expect(res.status).toBe(200);
+        const todoData = JSON.parse(res.text);
+        expect(todoData._id).toBe(id);
+        expect(todoData.userid).toBe("update_2");
+        expect(todoData.title).toBe("TODO更新テスト");
+        expect(todoData.body).toBe("");
+        done();
+    });
+    it("update _idが不正", async(done) => {
+        const res = await request
+            .post("/update_2/update")
+            .type("form")
+            .send({_id: "12345", title: "TODO更新テスト", body: "テストで更新"});
+        expect(res.status).toBe(422);
+        done();
     });
 });

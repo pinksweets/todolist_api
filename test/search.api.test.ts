@@ -2,7 +2,7 @@ import {} from "jest";
 import { request, registData } from "./utils/setting";
 
 describe("検索API test", () => {
-    it("search /:userid/search", async(done) => {
+    beforeAll(async() => {
         const testData : any = [
             {
                 userid: "search_1",
@@ -27,7 +27,8 @@ describe("検索API test", () => {
             }
         ];
         await registData(testData);
-
+    });
+    it("search /:userid/search", async(done) => {
         const res_1 = await request.get(encodeURI("/search_1/search/洗う"));
         expect(res_1.status).toBe(200);
         expect(JSON.parse(res_1.text)).toMatchObject([
