@@ -43,7 +43,9 @@ describe("unit test", () => {
             }
         ];
         testData.map(async(item) => {
-            return await(new Todo(item)).save((err, ret) => {
+            return await(new Todo(item)).save({
+                validateBeforeSave: false
+            }, (err, ret) => {
                 return ret
                     ._id
                     .toHexString();
@@ -161,16 +163,18 @@ describe("unit test", () => {
                     .toHexString();
             });
         });
-        it.skip("ユーザID son 更新", (done) => {
-            expect(todo.update(testId._id, "son", "ごはん", "たべる"))
-                .resolves
-                .toMatchObject({userid: "son", title: "ごはん", body: "たべる"});
+        it("ユーザID son 更新", async(done) => {
+            expect({"__v": 0, "_id": "59c399fd8796a714946595d3", "body": "たべる", "title": "ごはん", "userid": "sonx"}).toMatchObject({"body": "たべる", "title": "ごはん", "userid": "sonx"});
+            const ret = await todo.update(testId._id, "son", "ごはん", "たべる");
+            expect(ret["userid"]).toBe("son");
+            expect(ret["title"]).toBe("ごはん");
+            expect(ret["body"]).toBe("たべる");
             done();
         });
         it("ユーザID son 更新エラー", async(done) => {
-            expect(todo.update("12345", "son", "ごはん", "たべる"))
+            await expect(todo.update("12345", "son", "ごはん", "たべる"))
                 .rejects
-                .toBeCalled();
+                .toBeInstanceOf(mongoose.CastError);
             done();
         });
     });
