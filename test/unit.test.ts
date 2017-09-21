@@ -19,7 +19,7 @@ beforeAll(async() => {
         });
     });
 
-    const testData : Array<any> = [
+    const testData : Array < any > = [
         {
             userid: "father",
             title: "朝タスク",
@@ -43,8 +43,10 @@ beforeAll(async() => {
         }
     ];
     testData.map(async(item) => {
-        return await (new Todo(item)).save((err, ret) => {
-            return ret._id.toHexString();
+        return await(new Todo(item)).save((err, ret) => {
+            return ret
+                ._id
+                .toHexString();
         });
     });
 });
@@ -91,10 +93,6 @@ describe("unit test [root]", () => {
 });
 
 describe("unit test [add]", () => {
-    beforeAll(async() => {
-        const mongourl = "mongodb://localhost:27017/todolist";
-        mongoose.connect(mongourl, {useMongoClient: true});
-    });
     it("userid,title,body", async(done) => {
         const ret = await todo.add("unit_1", "title unit_1", "body unit_1");
         expect(ret["userid"]).toBe("unit_1");
@@ -149,6 +147,29 @@ describe("unit test [search]", () => {
     });
     it("ユーザID father 該当なし", async(done) => {
         expect(JSON.parse(await todo.search("father", "化粧"))).toMatchObject([]);
+        done();
+    });
+});
+
+describe("unit test [update]", () => {
+    let testId : any;
+    beforeAll(async() => {
+        testId = await(new Todo({userid: "son", title: "朝タスク", body: "顔洗う、学校の準備"})).save((err, ret) => {
+            return ret
+                ._id
+                .toHexString();
+        });
+    });
+    it("ユーザID son 更新", (done) => {
+        expect(todo.update(testId._id, "son", "ごはん", "たべる"))
+            .resolves
+            .toMatchObject({userid: "son", title: "ごはん", body: "たべる"});
+        done();
+    });
+    it("ユーザID son 更新エラー", (done) => {
+        expect(todo.update("12345", "son", "ごはん", "たべる"))
+            .rejects
+            .toBeCalled();
         done();
     });
 });
