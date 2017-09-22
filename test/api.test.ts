@@ -30,7 +30,7 @@ const registData = (data : Array < {
 } > > => {
     const ret = data.map(async(item) => {
         item["_id"] = await(new Todo(item))
-            .save({validateBeforeSave : false})
+            .save({validateBeforeSave: false})
             .then(rec => {
                 return rec
                     ._id
@@ -192,10 +192,34 @@ describe("api test", () => {
                     .type("form")
                     .send({});
                 expect(res.status).toBe(200);
-                expect(res.text).toBe("end");
+                expect(res.text).toBe("");
                 expect(JSON.parse((await request.get(encodeURI(`/destroy_1/search/${todo.title}`))).text)).toMatchObject([]);
                 done();
             });
+        });
+        it("削除id不正", async(done) => {
+            const res = await request
+                .post("/destroy_1/destroy/12345")
+                .type("form")
+                .send({});
+            expect(res.status).toBe(422);
+            done();
+        });
+        it("削除idなし", async(done) => {
+            const res = await request
+                .post("/destroy_1/destroy/")
+                .type("form")
+                .send({});
+            expect(res.status).toBe(404);
+            done();
+        });
+        it("削除ユーザ不正", async(done) => {
+            const res = await request
+                .post("/destroy_9/destroy/12345")
+                .type("form")
+                .send({});
+            expect(res.status).toBe(422);
+            done();
         });
     });
     describe("検索API test", () => {

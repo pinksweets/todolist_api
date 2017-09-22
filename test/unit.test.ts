@@ -164,7 +164,6 @@ describe("unit test", () => {
             });
         });
         it("ユーザID son 更新", async(done) => {
-            expect({"__v": 0, "_id": "59c399fd8796a714946595d3", "body": "たべる", "title": "ごはん", "userid": "sonx"}).toMatchObject({"body": "たべる", "title": "ごはん", "userid": "sonx"});
             const ret = await todo.update(testId._id, "son", "ごはん", "たべる");
             expect(ret["userid"]).toBe("son");
             expect(ret["title"]).toBe("ごはん");
@@ -175,6 +174,50 @@ describe("unit test", () => {
             await expect(todo.update("12345", "son", "ごはん", "たべる"))
                 .rejects
                 .toBeInstanceOf(mongoose.CastError);
+            done();
+        });
+        it("ユーザID son 更新エラー", async(done) => {
+            await expect(todo.update("", "son", "ごはん", "たべる"))
+                .rejects
+                .toBeInstanceOf(mongoose.CastError);
+            done();
+        });
+    });
+
+    describe("todo.destroy()", () => {
+        let testId1 : any,
+            testId2 : any;
+        beforeAll(async() => {
+            testId1 = await(new Todo({userid: "son", title: "朝タスク", body: "顔洗う、学校の準備"})).save({
+                validateBeforeSave: false
+            }, (err, ret) => {
+                return ret
+                    ._id
+                    .toHexString();
+            });
+            testId2 = await(new Todo({userid: "son", title: "消せないデータ", body: "user違いで削除出来ない"})).save({
+                validateBeforeSave: false
+            }, (err, ret) => {
+                return ret
+                    ._id
+                    .toHexString();
+            });
+        });
+        it("削除", async(done) => {
+            const ret = await todo.destroy(testId1._id, "son");
+            expect(ret["userid"]).toBe("son");
+            expect(ret["title"]).toBe("朝タスク");
+            expect(ret["body"]).toBe("顔洗う、学校の準備");
+            done();
+        });
+        it("削除ID不正", async(done) => {
+            await expect(todo.destroy("12345", "son"))
+                .rejects
+                .toBeInstanceOf(mongoose.CastError);
+            done();
+        });
+        it("ユーザID不正", async(done) => {
+            expect(await todo.destroy(testId2._id, "mother")).toBeNull();
             done();
         });
     });
