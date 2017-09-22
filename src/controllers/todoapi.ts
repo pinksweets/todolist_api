@@ -51,10 +51,14 @@ export let updateApi = (req : Request, res : Response) => {
 };
 
 export let destroyApi = (req : Request, res : Response) => {
-    const _id = req.params.id;
+    const userid = req.params.userid,
+        _id = req.params.id;
     todo
-        .destroy(_id)
+        .destroy(_id, userid)
         .then((ret) => {
-            res.send(ret);
+            res.send("");
+        })
+        .catch(() => {
+            res.sendStatus(422);
         });
 };

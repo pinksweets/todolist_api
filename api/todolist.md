@@ -14,8 +14,8 @@ FORMAT: 1A
     + userid: sampleuser (string, required) - ユーザID
  
 + Response 200 (application/json)
-    + Attributes
-        + todos (array[object])
+    + Attributes(array)
+        + (object)
             + _id: 59bc757aadb85c2ac429af5a(string)
             + userid: sampleuser(string)
             + title: タイトル(string)
@@ -36,8 +36,8 @@ FORMAT: 1A
     + keyword: abc123 (string, optional) - 検索条件
  
 + Response 200 (application/json)
-    + Attributes
-        + todos (array[object])
+    + Attributes(array)
+        + (object)
             + _id: 59bc757aadb85c2ac429af5a(string)
             + userid: sampleuser(string)
             + title: タイトル(string)
@@ -67,7 +67,7 @@ FORMAT: 1A
         + userid: sampleuser(string)
         + title: タイトル(string)
         + body: 内容(string)
-        + __v: バージョン(number)
+        + __v: バージョン(string)
  
 ## 更新 [/{userid}/update]
  
@@ -78,6 +78,7 @@ FORMAT: 1A
 * TODO情報を更新する。
 * 更新に成功した場合、更新後のTODO情報を返却する。
 * 更新に必要なパラメータが不足している場合、空文字として登録する。
+* 更新エラー時
  
 + Parameters
     + userid: sampleuser (string, required) - ユーザID
@@ -94,6 +95,8 @@ FORMAT: 1A
         + userid: sampleuser(string)
         + title: タイトル(string)
         + body: 内容(string)
+
++ Response 422
  
 ## 削除 [/{userid}/destroy/{id}]
  
@@ -102,11 +105,14 @@ FORMAT: 1A
 #### 処理概要
  
 * 指定したIDに該当するTODO情報を削除する。
-* 削除成否に関わらずHTTPステータスコード201を返却する。
+* 削除成功時、HTTPステータスコード200を返却する。
+* 削除失敗時、HTTPステータスコード422を返却する。
  
 + Parameters
     + userid: sampleuser (string, required) - ユーザID
     + id: 1(number, required) - TODOのID
  
-+ Response 200 (application/json)
++ Response 200
+ 
++ Response 422
  

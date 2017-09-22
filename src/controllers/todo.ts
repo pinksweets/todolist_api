@@ -38,12 +38,13 @@ export let update = (_id : string, userid : string, title : string, body : strin
         title: title,
         body: body
     };
-    return Todo.findByIdAndUpdate(_id, todo, {new: true}).exec();
+    return Todo
+        .findByIdAndUpdate(_id, todo, {new: true})
+        .exec();
 };
 
-export let destroy = async(_id : string) => {
-    await Todo
-        .findByIdAndRemove(_id)
+export let destroy = (_id : string, userid : string) => {
+    return Todo
+        .findOneAndRemove({_id: _id, userid: userid})
         .exec();
-    return "end";
 };
