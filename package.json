@@ -8,8 +8,8 @@
   "scripts": {
     "start": "npm run build && node dist/server.js",
     "build": "npm run lint && tsc",
-    "test": "jest --forceExit",
-    "coverage": "jest --coverage --forceExit",
+    "test": "jest --no-cache -b",
+    "coverage": "jest --coverage -b",
     "lint": "tslint -c tslint.json -p tsconfig.json --type-check",
     "api": "aglio -i ./api/todolist.md -o ./api/todolist.html"
   },
