@@ -32,7 +32,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 /**
- * API examples routes.
+ * API routes.
  */
 app.get("/:userid/", todoController.rootApi);
 app.get("/:userid/:keyword", todoController.searchApi);
