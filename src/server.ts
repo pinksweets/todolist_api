@@ -35,11 +35,10 @@ app.use(bodyParser.urlencoded({extended: true}));
  * API examples routes.
  */
 app.get("/:userid/", todoController.rootApi);
-app.get("/:userid/search/:keyword", todoController.searchApi);
-
-app.post("/:userid/add", todoController.addApi);
-app.post("/:userid/update", todoController.updateApi);
-app.post("/:userid/destroy/:id", todoController.destroyApi);
+app.get("/:userid/:keyword", todoController.searchApi);
+app.post("/:userid/", todoController.addApi);
+app.put("/:userid/", todoController.updateApi);
+app.delete("/:userid/:id", todoController.destroyApi);
 
 /**
  * Start Express server.

@@ -58,7 +58,7 @@ describe("api test", () => {
         });
         it("パラメータ[title,body]のパターン", async(done) => {
             const res = await request
-                .post("/add_1/add")
+                .post("/add_1/")
                 .type("form")
                 .send({title: "買い物メモ", body: "ネギ、豆腐、納豆"});
             const todoData = JSON.parse(res.text);
@@ -69,7 +69,7 @@ describe("api test", () => {
         });
         it("パラメータ[title]のパターン", async(done) => {
             const res = await request
-                .post("/add_1/add")
+                .post("/add_1/")
                 .type("form")
                 .send({title: "買い食い禁止！"});
             const todoData = JSON.parse(res.text);
@@ -80,7 +80,7 @@ describe("api test", () => {
         });
         it("パラメータ[body]のパターン", async(done) => {
             const res = await request
-                .post("/add_1/add")
+                .post("/add_1/")
                 .type("form")
                 .send({body: "帰ったらお風呂を沸かす"});
             const todoData = JSON.parse(res.text);
@@ -91,7 +91,7 @@ describe("api test", () => {
         });
         it("BODYにデータが無いパターン", async(done) => {
             const res = await request
-                .post("/add_1/add")
+                .post("/add_1/")
                 .type("form")
                 .send({});
             const todoData = JSON.parse(res.text);
@@ -188,18 +188,18 @@ describe("api test", () => {
         it("削除→検索", async(done) => {
             todos[1].then(async(todo) => {
                 const res = await request
-                    .post(`/destroy_1/destroy/${todo._id}`)
+                    .delete(`/destroy_1/${todo._id}`)
                     .type("form")
                     .send({});
                 expect(res.status).toBe(200);
                 expect(res.text).toBe("");
-                expect(JSON.parse((await request.get(encodeURI(`/destroy_1/search/${todo.title}`))).text)).toMatchObject([]);
+                expect(JSON.parse((await request.get(encodeURI(`/destroy_1/${todo.title}`))).text)).toMatchObject([]);
                 done();
             });
         });
         it("削除id不正", async(done) => {
             const res = await request
-                .post("/destroy_1/destroy/12345")
+                .delete("/destroy_1/12345")
                 .type("form")
                 .send({});
             expect(res.status).toBe(422);
@@ -207,7 +207,7 @@ describe("api test", () => {
         });
         it("削除idなし", async(done) => {
             const res = await request
-                .post("/destroy_1/destroy/")
+                .delete("/destroy_1/")
                 .type("form")
                 .send({});
             expect(res.status).toBe(404);
@@ -215,7 +215,7 @@ describe("api test", () => {
         });
         it("削除ユーザ不正", async(done) => {
             const res = await request
-                .post("/destroy_9/destroy/12345")
+                .delete("/destroy_9/12345")
                 .type("form")
                 .send({});
             expect(res.status).toBe(422);
@@ -251,7 +251,7 @@ describe("api test", () => {
             await registData(testData);
         });
         it("search bodyのみ該当", async(done) => {
-            const res = await request.get(encodeURI("/search_1/search/洗う"));
+            const res = await request.get(encodeURI("/search_1/洗う"));
             expect(res.status).toBe(200);
             expect(JSON.parse(res.text)).toMatchObject([
                 {
@@ -263,7 +263,7 @@ describe("api test", () => {
             done();
         });
         it("search titleとbodyに該当", async(done) => {
-            const res = await request.get(encodeURI("/search_2/search/準備"));
+            const res = await request.get(encodeURI("/search_2/準備"));
             expect(res.status).toBe(200);
             expect(JSON.parse(res.text)).toMatchObject([
                 {
@@ -307,7 +307,7 @@ describe("api test", () => {
         it("update パラメータ全部あり", async(done) => {
             const id = (await todos[1])._id;
             const res = await request
-                .post("/update_1/update")
+                .put("/update_1/")
                 .type("form")
                 .send({_id: id, title: "TODO更新テスト", body: "テストで更新"});
             expect(res.status).toBe(200);
@@ -321,7 +321,7 @@ describe("api test", () => {
         });
         it("update _idなし", async(done) => {
             const res = await request
-                .post("/update_2/update")
+                .put("/update_2/")
                 .type("form")
                 .send({title: "TODO更新テスト", body: "テストで更新"});
             expect(res.status).toBe(422);
@@ -330,7 +330,7 @@ describe("api test", () => {
         it("update titleなし", async(done) => {
             const id = (await todos[2])._id;
             const res = await request
-                .post("/update_2/update")
+                .put("/update_2/")
                 .type("form")
                 .send({_id: id, body: "テストで更新"});
             expect(res.status).toBe(200);
@@ -344,7 +344,7 @@ describe("api test", () => {
         it("update bodyなし", async(done) => {
             const id = (await todos[3])._id;
             const res = await request
-                .post("/update_2/update")
+                .put("/update_2/")
                 .type("form")
                 .send({_id: id, title: "TODO更新テスト"});
             expect(res.status).toBe(200);
@@ -357,7 +357,7 @@ describe("api test", () => {
         });
         it("update _idが不正", async(done) => {
             const res = await request
-                .post("/update_2/update")
+                .put("/update_2/")
                 .type("form")
                 .send({_id: "12345", title: "TODO更新テスト", body: "テストで更新"});
             expect(res.status).toBe(422);
