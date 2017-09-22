@@ -62,7 +62,7 @@ describe("api test", () => {
                 .type("form")
                 .send({title: "買い物メモ", body: "ネギ、豆腐、納豆"});
             const todoData = JSON.parse(res.text);
-            expect(res.status).toBe(200);
+            expect(res.status).toBe(201);
             expect(todoData.title).toBe("買い物メモ");
             expect(todoData.body).toBe("ネギ、豆腐、納豆");
             done();
@@ -73,7 +73,7 @@ describe("api test", () => {
                 .type("form")
                 .send({title: "買い食い禁止！"});
             const todoData = JSON.parse(res.text);
-            expect(res.status).toBe(200);
+            expect(res.status).toBe(201);
             expect(todoData.title).toBe("買い食い禁止！");
             expect(todoData.body).toBe("");
             done();
@@ -84,7 +84,7 @@ describe("api test", () => {
                 .type("form")
                 .send({body: "帰ったらお風呂を沸かす"});
             const todoData = JSON.parse(res.text);
-            expect(res.status).toBe(200);
+            expect(res.status).toBe(201);
             expect(todoData.title).toBe("");
             expect(todoData.body).toBe("帰ったらお風呂を沸かす");
             done();
@@ -95,7 +95,7 @@ describe("api test", () => {
                 .type("form")
                 .send({});
             const todoData = JSON.parse(res.text);
-            expect(res.status).toBe(200);
+            expect(res.status).toBe(201);
             expect(todoData.title).toBe("");
             expect(todoData.body).toBe("");
             done();
@@ -191,7 +191,7 @@ describe("api test", () => {
                     .delete(`/destroy_1/${todo._id}`)
                     .type("form")
                     .send({});
-                expect(res.status).toBe(200);
+                expect(res.status).toBe(204);
                 expect(res.text).toBe("");
                 expect(JSON.parse((await request.get(encodeURI(`/destroy_1/${todo.title}`))).text)).toMatchObject([]);
                 done();

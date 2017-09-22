@@ -27,7 +27,7 @@ export let addApi = (req : Request, res : Response) => {
     todo
         .add(userid, title, body)
         .then((ret) => {
-            res.send(ret);
+            res.status(201).send(ret);
         });
 };
 
@@ -56,7 +56,7 @@ export let destroyApi = (req : Request, res : Response) => {
     todo
         .destroy(_id, userid)
         .then((ret) => {
-            res.send("");
+            res.sendStatus(204);
         })
         .catch(() => {
             res.sendStatus(422);

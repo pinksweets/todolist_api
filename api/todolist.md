@@ -2,7 +2,7 @@ FORMAT: 1A
 
 # Group TODOリスト
  
-## ユーザ情報 [/{userid}]
+## TODO情報 [/{userid}/]
  
 ### ユーザTODO取得API [GET]
  
@@ -21,30 +21,6 @@ FORMAT: 1A
             + title: タイトル(string)
             + body: 内容(string)
  
-## 検索 [/{userid}/search/{keyword}]
- 
-### 検索API [GET]
- 
-#### 処理概要
- 
-* タイトルと内容からTODO情報を部分一致で検索する。
-* 検索条件が指定されていない場合、登録されているTODO情報を全て返却する。
-* 一致するTODO情報が無い場合、空のArrayを返却する。
- 
-+ Parameters
-    + userid: sampleuser (string, required) - ユーザID
-    + keyword: abc123 (string, optional) - 検索条件
- 
-+ Response 200 (application/json)
-    + Attributes(array)
-        + (object)
-            + _id: 59bc757aadb85c2ac429af5a(string)
-            + userid: sampleuser(string)
-            + title: タイトル(string)
-            + body: 内容(string)
- 
-## 登録 [/{userid}/add]
- 
 ### 登録API [POST]
  
 #### 処理概要
@@ -61,7 +37,7 @@ FORMAT: 1A
         + title: abc123 (string, optional) - タイトル(format: .{1,50})
         + body: abc123 (string, optional) - 内容(pattern: ^.{1,200}$)
  
-+ Response 200 (application/json)
++ Response 201 (application/json)
     + Attributes
         + _id: 59bc757aadb85c2ac429af5a(string)
         + userid: sampleuser(string)
@@ -69,9 +45,7 @@ FORMAT: 1A
         + body: 内容(string)
         + __v: バージョン(string)
  
-## 更新 [/{userid}/update]
- 
-### 更新API [POST]
+### 更新API [PUT]
  
 #### 処理概要
  
@@ -98,9 +72,31 @@ FORMAT: 1A
 
 + Response 422
  
-## 削除 [/{userid}/destroy/{id}]
+## 検索 [/{userid}/{keyword}]
  
-### 削除API [POST]
+### 検索API [GET]
+ 
+#### 処理概要
+ 
+* タイトルと内容からTODO情報を部分一致で検索する。
+* 検索条件が指定されていない場合、登録されているTODO情報を全て返却する。
+* 一致するTODO情報が無い場合、空のArrayを返却する。
+ 
++ Parameters
+    + userid: sampleuser (string, required) - ユーザID
+    + keyword: abc123 (string, optional) - 検索条件
+ 
++ Response 200 (application/json)
+    + Attributes(array)
+        + (object)
+            + _id: 59bc757aadb85c2ac429af5a(string)
+            + userid: sampleuser(string)
+            + title: タイトル(string)
+            + body: 内容(string)
+ 
+## 削除 [/{userid}/{id}]
+ 
+### 削除API [DELETE]
  
 #### 処理概要
  
@@ -112,7 +108,7 @@ FORMAT: 1A
     + userid: sampleuser (string, required) - ユーザID
     + id: 1(number, required) - TODOのID
  
-+ Response 200
++ Response 204
  
 + Response 422
  
