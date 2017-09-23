@@ -34,11 +34,11 @@ app.use(bodyParser.urlencoded({extended: true}));
 /**
  * API routes.
  */
-app.get("/:userid/", todoController.rootApi);
-app.get("/:userid/:keyword", todoController.searchApi);
-app.post("/:userid/", todoController.addApi);
-app.put("/:userid/", todoController.updateApi);
-app.delete("/:userid/:id", todoController.destroyApi);
+app.get("/:userid/todos/", todoController.rootApi);
+app.get("/:userid/todos/:keyword", todoController.searchApi);
+app.post("/:userid/todos/", todoController.addApi);
+app.put("/:userid/todos/", todoController.updateApi);
+app.delete("/:userid/todos/:id", todoController.destroyApi);
 
 /**
  * Start Express server.
